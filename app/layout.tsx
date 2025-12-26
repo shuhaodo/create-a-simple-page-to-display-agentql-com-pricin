@@ -5,8 +5,8 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'AgentQL Pricing | AI-Powered Web Scraping',
-  description: 'Simple and transparent pricing for AgentQL.',
+  title: 'Turso Task Manager',
+  description: 'A modern task manager powered by Next.js and Turso',
 };
 
 export default function RootLayout({
@@ -16,7 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-slate-50 text-slate-900`}>{children}</body>
+      <body className={`${inter.className} bg-slate-50 text-slate-900`}>
+        {children}
+      </body>
     </html>
   );
 }

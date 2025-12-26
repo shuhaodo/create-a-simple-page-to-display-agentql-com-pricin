@@ -1,8 +1,9 @@
-import { db } from '@/lib/db';
+import { db, initDb } from '@/lib/db';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
+    await initDb();
     const result = await db.execute('SELECT * FROM items ORDER BY created_at DESC');
     return NextResponse.json(result.rows);
   } catch (error) {
@@ -12,15 +13,15 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { content } = await request.json();
-    if (!content) return NextResponse.json({ error: 'Content is required' }, { status: 400 });
+    const { title, description } = await request.json();
+    if (!title) return NextResponse.json({ error: 'Title is required' }, { status: 400 });
 
     const result = await db.execute({
-      sql: 'INSERT INTO items (content) VALUES (?)',
-      args: [content],
+      sql: 'INSERT INTO items (title, description) VALUES (?, ?)',
+      args: [title, description || '']
     });
     
-    return NextResponse.json({ id: Number(result.lastInsertRowid), content, completed: 0 });
+    return NextResponse.json({ id: result.lastInsertRowid, title, description }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to create item' }, { status: 500 });
   }
